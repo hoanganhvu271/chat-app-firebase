@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11988059236",
+    "project_id": "jetpack-compose-74e59",
+    "storage_bucket": "jetpack-compose-74e59.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11988059236:android:5da834995fbdd89d60cb71",
+        "android_client_info": {
+          "package_name": "com.hav.chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTfNeqWwwlzXvwAAUZMrGcHkRTDBglQqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
