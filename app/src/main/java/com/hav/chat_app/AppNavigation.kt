@@ -1,5 +1,6 @@
 package com.hav.chat_app
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
@@ -24,25 +25,27 @@ fun AppNavigation() {
         NavHost(
             navController = navController,
             startDestination =
-            if (FirebaseAuth.getInstance().currentUser != null)
+            if (FirebaseAuth.getInstance().currentUser != null) {
+                Log.d("Vu", "AppNavigation: ${FirebaseAuth.getInstance().currentUser}")
                 Destination.HOME_SCREEN
+            }
             else
-                Destination.AUTHEN_SCREEN
+                Destination.LOGIN_SCREEN
         ) {
             composable(Destination.AUTHEN_SCREEN) {
-                AuthenView(onLogin = {action.login}, onRegister = {action.register})
+                AuthenView(onLogin = { action.login }, onRegister = { action.register })
             }
 
             composable(Destination.LOGIN_SCREEN) {
-                LoginView(onRegister = {action.register}, onNavigateBack = {action.navigateBack})
+                LoginView(onHome = { action.home() }, onNavigateBack = { action.navigateBack })
             }
 
             composable(Destination.REGISTER_SCREEN) {
-                RegisterView(onLogin = {action.login}, onNavigateBack = {action.navigateBack})
+                RegisterView(onLogin = { action.login() }, onNavigateBack = { action.navigateBack })
             }
 
             composable(Destination.HOME_SCREEN) {
-                HomeView(onLogout = {action.navigateBack})
+                HomeView(onLogout = { action.navigateBack() })
             }
         }
     }

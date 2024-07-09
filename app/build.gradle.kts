@@ -60,8 +60,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,6 +71,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+
+        // Import the BoM for the Firebase platform
+        implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation("com.google.firebase:firebase-auth")
+
 }

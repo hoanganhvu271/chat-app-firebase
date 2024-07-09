@@ -1,5 +1,6 @@
 package com.hav.chat_app
 
+import android.util.Log
 import androidx.navigation.NavController
 import com.hav.chat_app.Destination.AUTHEN_SCREEN
 
@@ -12,6 +13,7 @@ object Destination{
 
 class Navigate(val navController: NavController){
     val home: () -> Unit = {
+        Log.d("Vu", "hehe")
         navController.navigate(Destination.HOME_SCREEN){
             popUpTo(AUTHEN_SCREEN) {
                 inclusive = true
