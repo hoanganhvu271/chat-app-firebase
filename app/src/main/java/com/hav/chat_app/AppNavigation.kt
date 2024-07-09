@@ -30,7 +30,7 @@ fun AppNavigation() {
                 Destination.HOME_SCREEN
             }
             else
-                Destination.LOGIN_SCREEN
+                Destination.HOME_SCREEN
         ) {
             composable(Destination.AUTHEN_SCREEN) {
                 AuthenView(onLogin = { action.login }, onRegister = { action.register })

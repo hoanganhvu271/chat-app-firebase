@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hav.chat_app.model.Message
 import com.hav.chat_app.ui.theme.Message1
 import com.hav.chat_app.ui.theme.Message2
 
@@ -79,7 +80,7 @@ fun CButton(login: () -> Unit, text: String) {
 }
 
 @Composable
-fun MessageBox(message : String, isOwned: Boolean) {
+fun MessageBox(message: Message, isOwned : Boolean) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -93,7 +94,7 @@ fun MessageBox(message : String, isOwned: Boolean) {
         )
     ) {
         Text(
-            text = message,
+            text = message.content,
             textAlign = if (isOwned) TextAlign.End else TextAlign.Start,
             modifier = Modifier.padding(8.dp),
             color = Color.Black
