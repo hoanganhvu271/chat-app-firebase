@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.auth.FirebaseAuth
@@ -20,11 +21,15 @@ import com.hav.chat_app.components.MessageBox
 import com.hav.chat_app.model.Message
 
 @Composable
-fun ChatView(chatViewModel : ChatViewModel = ChatViewModel()) {
+fun ChatView(chatId: String, chatViewModel : ChatViewModel = ChatViewModel()) {
     val message: String by chatViewModel.message.observeAsState("")
     val messages: List<Message> by chatViewModel.messages.observeAsState(listOf())
     val context = LocalContext.current
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
+    LaunchedEffect(key1 = Unit) {
+        chatViewModel.getMessages(chatId)
+    }
 
     Column(
         modifier = Modifier
@@ -48,7 +53,8 @@ fun ChatView(chatViewModel : ChatViewModel = ChatViewModel()) {
         ChatBar(
             message = message,
             onMessageChange = { chatViewModel.updateMessage(it) },
-            onSendMessage = { chatViewModel.sendMessage() }
+            onSendMessage = { chatViewModel.sendMessage(Message(currentUserId.toString(), chatId, message, System.currentTimeMillis()
+                 , false)) }
         )
 
     }

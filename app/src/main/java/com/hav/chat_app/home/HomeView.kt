@@ -20,25 +20,26 @@ import com.hav.chat_app.components.MessageBox
 import com.hav.chat_app.model.Contact
 
 @Composable
-fun HomeView(onLogout : () -> Unit, homeViewModel: HomeViewModel = HomeViewModel()) {
+fun HomeView(onLogout : () -> Unit, onChat: (String) -> Unit, homeViewModel: HomeViewModel = HomeViewModel()) {
 
     val contactList : List<Contact> by homeViewModel.contacts.observeAsState(initial = emptyList())
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = homeViewModel) {
 //        homeViewModel.addContact(Contact("1", 1), onLogout)
         homeViewModel.getContacts()
     }
 
+
+
     Column {
         Text(text = "Home View")
         LazyColumn(
-            modifier = Modifier.padding(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            reverseLayout = true
         ) {
             items(contactList) {contact ->
-               ContactBox(contact = contact)
+               ContactBox(contact = contact){
+                   onChat(contact.userId)
+               }
             }
         }
     }

@@ -3,10 +3,13 @@ package com.hav.chat_app
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
+import com.hav.chat_app.chat.ChatView
 import com.hav.chat_app.home.HomeView
 import com.hav.chat_app.login.LoginView
 import com.hav.chat_app.register.RegisterView
@@ -28,9 +31,8 @@ fun AppNavigation() {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 Log.d("Vu", "AppNavigation: ${FirebaseAuth.getInstance().currentUser}")
                 Destination.HOME_SCREEN
-            }
-            else
-                Destination.HOME_SCREEN
+            } else
+                Destination.LOGIN_SCREEN
         ) {
             composable(Destination.AUTHEN_SCREEN) {
                 AuthenView(onLogin = { action.login }, onRegister = { action.register })
@@ -45,7 +47,21 @@ fun AppNavigation() {
             }
 
             composable(Destination.HOME_SCREEN) {
-                HomeView(onLogout = { action.navigateBack() })
+                HomeView(
+                    onLogout = { action.navigateBack() },
+                    onChat = { receiverId -> action.chat(receiverId) })
+            }
+
+            composable(
+                route = Destination.CHAT_SCREEN,
+                arguments = listOf(navArgument("chatId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getString("chatId")
+
+                if (chatId != null) {
+                    ChatView(chatId = chatId)
+                }
+
             }
         }
     }

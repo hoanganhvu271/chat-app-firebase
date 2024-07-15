@@ -9,6 +9,7 @@ object Destination{
     const val LOGIN_SCREEN = "login"
     const val REGISTER_SCREEN = "register"
     const val HOME_SCREEN = "home"
+    const val CHAT_SCREEN = "chat/{chatId}"
 }
 
 class Navigate(val navController: NavController){
@@ -26,4 +27,5 @@ class Navigate(val navController: NavController){
     val login: () -> Unit = { navController.navigate(Destination.LOGIN_SCREEN) }
     val register: () -> Unit = { navController.navigate(Destination.REGISTER_SCREEN) }
     val navigateBack: () -> Unit = { navController.popBackStack() }
+    val chat : (String) -> Unit = { chatId : String -> navController.navigate("chat/$chatId") }
 }

@@ -1,5 +1,6 @@
 package com.hav.chat_app.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,14 +63,17 @@ fun CTextField(
         ),
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth()
     )
 }
 
 @Composable
 fun CButton(login: () -> Unit, text: String) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Button(
-        onClick = login,
+        onClick = {
+            keyboardController?.hide()
+            login()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -77,7 +82,6 @@ fun CButton(login: () -> Unit, text: String) {
             contentColor = Color.White
         ),
     ) {
-
         Text(text = text)
     }
 }
@@ -108,6 +112,7 @@ fun MessageBox(message: Message, isOwned : Boolean) {
 
 @Composable
 fun ChatBar(message : String, onMessageChange: (String) -> Unit, onSendMessage: () -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -125,12 +130,21 @@ fun ChatBar(message : String, onMessageChange: (String) -> Unit, onSendMessage: 
 
 }
 
+@Preview(showSystemUi = true)
 @Composable
-fun  ContactBox(contact : Contact) {
+fun ChatBarPreview() {
+    ChatBar(message = "hello", onMessageChange = {}, onSendMessage = {})
+
+}
+
+@Composable
+fun  ContactBox(contact : Contact, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
+
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -164,8 +178,21 @@ fun  ContactBox(contact : Contact) {
 }
 
 
+//@Preview(showSystemUi = true)
+//@Composable
+//fun ContactPreview() {
+//    ContactBox(Contact("123456", 12345))
+//}
+
 @Preview(showSystemUi = true)
 @Composable
-fun ContactPreview() {
-    ContactBox(Contact("123456", 12345))
+fun ChatPreview() {
+//    MessageBox(message = Message("1", "1", "Hello", 1, true), isOwned = false)
+    MessageBox(message =
+    Message("1",
+        "1",
+        "Hello",
+        1,
+        true),
+        isOwned = true)
 }
