@@ -16,11 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hav.chat_app.model.Contact
 import com.hav.chat_app.model.Message
 import com.hav.chat_app.ui.theme.Message1
 import com.hav.chat_app.ui.theme.Message2
@@ -122,3 +125,47 @@ fun ChatBar(message : String, onMessageChange: (String) -> Unit, onSendMessage: 
 
 }
 
+@Composable
+fun  ContactBox(contact : Contact) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(15.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
+    ) {
+        Text(
+            text = contact.userId,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(8.dp),
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = Bold
+            ),
+            color = Color.Black
+        )
+
+        Text(
+            text = contact.lastContactTimeStamp.toString(),
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(8.dp),
+            style = TextStyle(
+                fontSize = 15.sp,
+                fontWeight = Bold
+            ),
+            color = Color.Gray
+        )
+    }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun ContactPreview() {
+    ContactBox(Contact("123456", 12345))
+}
