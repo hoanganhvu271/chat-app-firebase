@@ -1,6 +1,11 @@
 package com.hav.chat_app.components
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement.Absolute.Center
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +20,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -29,6 +36,7 @@ import com.hav.chat_app.model.Contact
 import com.hav.chat_app.model.Message
 import com.hav.chat_app.ui.theme.Message1
 import com.hav.chat_app.ui.theme.Message2
+import com.hav.chat_app.utils.Trans.Companion.timestampToTime
 
 
 @Composable
@@ -87,31 +95,48 @@ fun CButton(login: () -> Unit, text: String) {
 }
 
 @Composable
-fun MessageBox(message: Message, isOwned : Boolean) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isOwned) Message1 else Message2
-        )
+fun MessageBox(message: Message, isOwned: Boolean) {
+    Log.d("Vu", "isOwned: $isOwned")
+    val textAlign = if (isOwned) TextAlign.End else TextAlign.Start
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = if (!isOwned) Alignment.Start else Alignment.End
     ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    if (isOwned) Message1 else Message2,
+                    RoundedCornerShape(100.dp)
+                )
+            ,
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = message.content, style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 15.sp
+                ),
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)
+            )
+        }
         Text(
-            text = message.content,
-            textAlign = if (isOwned) TextAlign.End else TextAlign.Start,
-            modifier = Modifier.padding(8.dp),
-            color = Color.Black
+            text = timestampToTime(message.timestamp),
+            style = TextStyle(
+                color = Gray,
+                fontSize = 12.sp
+            ),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
         )
     }
+
+
+
 
 }
 
 @Composable
-fun ChatBar(message : String, onMessageChange: (String) -> Unit, onSendMessage: () -> Unit) {
+fun ChatBar(message: String, onMessageChange: (String) -> Unit, onSendMessage: () -> Unit) {
 
     Row(
         modifier = Modifier
@@ -138,7 +163,7 @@ fun ChatBarPreview() {
 }
 
 @Composable
-fun  ContactBox(contact : Contact, onClick: () -> Unit) {
+fun ContactBox(contact: Contact, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -188,11 +213,15 @@ fun  ContactBox(contact : Contact, onClick: () -> Unit) {
 @Composable
 fun ChatPreview() {
 //    MessageBox(message = Message("1", "1", "Hello", 1, true), isOwned = false)
-    MessageBox(message =
-    Message("1",
-        "1",
-        "Hello",
-        1,
-        true),
-        isOwned = true)
+    MessageBox(
+        message =
+        Message(
+            "1",
+            "1",
+            "Hello",
+            1,
+            true
+        ),
+        isOwned = true
+    )
 }

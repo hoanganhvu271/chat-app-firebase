@@ -25,7 +25,6 @@ class ChatViewModel {
     }
 
 
-
     fun sendMessage(newMessage: Message) {
         // send message
         val messageMap = hashMapOf(
@@ -78,6 +77,5 @@ class ChatViewModel {
                     Log.d("Vu", "Current data: null")
                 }
             }
-
     }
 }
