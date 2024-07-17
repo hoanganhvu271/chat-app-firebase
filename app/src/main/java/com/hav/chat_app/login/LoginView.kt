@@ -2,27 +2,23 @@ package com.hav.chat_app.login
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.magnifier
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hav.chat_app.R
 import com.hav.chat_app.components.CButton
-import com.hav.chat_app.components.CTextField
+import com.hav.chat_app.components.IconTextField
+import com.hav.chat_app.components.PasswordTextField
+import com.hav.chat_app.components.SignUpText
 import com.hav.chat_app.components.TitleText
 
 @Composable
@@ -35,27 +31,40 @@ fun LoginView(onHome : () -> Unit, onNavigateBack: () -> Unit, loginViewModel: L
 
     Box (
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = androidx.compose.ui.Alignment.Center
+        contentAlignment = Alignment.Center
     ){
-//        if(loading){
-//            // Loading
-//            CircularProgressIndicator()
-//        }
-
         Column {
-            TitleText(text = "Chat App")
+            TitleText(text = "LOGIN")
             Spacer(modifier = Modifier.height(20.dp))
-            CTextField(value = email, onValueChange = {loginViewModel.updateEmail(it)}, label = "Email", keyboardType = KeyboardType.Email)
-            CTextField(value = password, onValueChange = {loginViewModel.updatePassword(it)}, label = "Password", keyboardType = KeyboardType.Password)
+            IconTextField(value = email, onValueChange = {loginViewModel.updateEmail(it)}, label = "Email", R.drawable.baseline_people_24)
+            PasswordTextField(value = password, onValueChange = {loginViewModel.updatePassword(it)}, label = "Password", R.drawable.baseline_lock_24)
             Spacer(modifier = Modifier.height(20.dp))
 
-//            CButton({loginViewModel.login(onHome, context)}, "Login")
             CButton({ loginViewModel.login(onHome =  onHome , context = context) }, "Login")
 
-
+            SignUpText({})
         }
-
-
     }
 }
 
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewLoginView() {
+    Box (
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+
+        Column {
+            TitleText(text = "USER LOGIN")
+            Spacer(modifier = Modifier.height(20.dp))
+            IconTextField(value = "", onValueChange = {}, label = "Email", R.drawable.baseline_people_24)
+            PasswordTextField(value = "", onValueChange = {}, label = "Password", R.drawable.baseline_lock_24)
+            Spacer(modifier = Modifier.height(20.dp))
+
+            CButton({  }, "Login")
+
+            SignUpText({})
+        }
+    }
+}

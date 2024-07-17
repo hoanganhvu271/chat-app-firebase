@@ -1,5 +1,6 @@
 package com.hav.chat_app.components
 
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,26 +10,44 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,18 +66,18 @@ fun TitleText(text: String) {
         color = Color.Black,
         style = androidx.compose.ui.text.TextStyle(
             fontSize = 24.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            fontWeight = Bold
         ),
-        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        textAlign = TextAlign.Center
     )
 }
 
 @Composable
-fun CTextField(
+fun NormalTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
-    keyboardType: KeyboardType
+    label: String
+
 ) {
     OutlinedTextField(
         value = value,
@@ -67,10 +86,93 @@ fun CTextField(
         singleLine = true,
         maxLines = 1,
         keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType
+            keyboardType = KeyboardType.Text
         ),
         modifier = Modifier
             .padding(8.dp)
+    )
+}
+
+@Composable
+fun IconTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    iconId: Int
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        singleLine = true,
+        maxLines = 1,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = iconId),
+                modifier = Modifier.height(24.dp),
+                contentDescription = null
+            )
+        }
+    )
+}
+
+@Composable
+fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    iconId: Int
+) {
+
+    val passwordVisibility = remember {
+        mutableStateOf(false)
+    }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        singleLine = true,
+        maxLines = 1,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = null,
+                modifier = Modifier.height(24.dp)
+            )
+        },
+        trailingIcon = {
+            val iconImage = if (passwordVisibility.value) {
+                Icons.Filled.Visibility
+            } else {
+                Icons.Filled.VisibilityOff
+            }
+
+            Icon(
+                imageVector = iconImage,
+                contentDescription = null,
+                modifier = Modifier.clickable {
+                    passwordVisibility.value = !passwordVisibility.value
+                }
+            )
+        },
+        visualTransformation = if (passwordVisibility.value) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        }
     )
 }
 
@@ -87,7 +189,8 @@ fun CButton(login: () -> Unit, text: String) {
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White
+            contentColor = Color.White,
+            containerColor = Color.Red
         ),
     ) {
         Text(text = text)
@@ -108,8 +211,7 @@ fun MessageBox(message: Message, isOwned: Boolean) {
                 .background(
                     if (isOwned) Message1 else Message2,
                     RoundedCornerShape(100.dp)
-                )
-            ,
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -131,8 +233,6 @@ fun MessageBox(message: Message, isOwned: Boolean) {
     }
 
 
-
-
 }
 
 @Composable
@@ -143,11 +243,10 @@ fun ChatBar(message: String, onMessageChange: (String) -> Unit, onSendMessage: (
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        CTextField(
+        NormalTextField(
             value = message,
             onValueChange = onMessageChange,
-            label = "Type your message",
-            keyboardType = KeyboardType.Text
+            label = "Type your message"
         )
 
         CButton(onSendMessage, "Send")
@@ -202,26 +301,32 @@ fun ContactBox(contact: Contact, onClick: () -> Unit) {
     }
 }
 
-
-//@Preview(showSystemUi = true)
-//@Composable
-//fun ContactPreview() {
-//    ContactBox(Contact("123456", 12345))
-//}
-
-@Preview(showSystemUi = true)
 @Composable
-fun ChatPreview() {
-//    MessageBox(message = Message("1", "1", "Hello", 1, true), isOwned = false)
-    MessageBox(
-        message =
-        Message(
-            "1",
-            "1",
-            "Hello",
-            1,
-            true
-        ),
-        isOwned = true
-    )
+fun SignUpText( onSignUpClick: () -> Unit){
+    val annotationString = buildAnnotatedString {
+        append("Don't have an account? ")
+        pushStyle(
+            SpanStyle(
+                color = Color.Red,
+                fontWeight = Bold,
+                textDecoration = TextDecoration.Underline
+            )
+        )
+        append("Sign up")
+        pop()
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ClickableText(
+            text = annotationString,
+            onClick = {
+                onSignUpClick()
+            }
+        )
+    }
 }
+
+
