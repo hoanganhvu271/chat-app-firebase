@@ -29,8 +29,6 @@ fun HomeView(onLogout : () -> Unit, onChat: (String) -> Unit, homeViewModel: Hom
         homeViewModel.getContacts()
     }
 
-
-
     Column {
         Text(text = "Home View")
         LazyColumn(
