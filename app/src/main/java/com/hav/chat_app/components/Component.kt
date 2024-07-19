@@ -4,14 +4,21 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,9 +27,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -32,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.painter.Painter
@@ -42,6 +48,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -51,6 +58,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hav.chat_app.R
 import com.hav.chat_app.model.Contact
 import com.hav.chat_app.model.Message
 import com.hav.chat_app.ui.theme.Message1
@@ -254,7 +262,7 @@ fun ChatBar(message: String, onMessageChange: (String) -> Unit, onSendMessage: (
 
 }
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
 @Composable
 fun ChatBarPreview() {
     ChatBar(message = "hello", onMessageChange = {}, onSendMessage = {})
@@ -263,46 +271,61 @@ fun ChatBarPreview() {
 
 @Composable
 fun ContactBox(contact: Contact, onClick: () -> Unit) {
-    Card(
+    Box(
         modifier = Modifier
-            .padding(8.dp)
             .fillMaxWidth()
-            .clickable { onClick() },
-
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
+            .clickable {
+                onClick()
+            }
+            .background(Color.White)
+            .padding(horizontal = 20.dp, vertical = 5.dp)
     ) {
-        Text(
-            text = contact.userId,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(8.dp),
-            style = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = Bold
-            ),
-            color = Color.Black
-        )
+        Column() {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.images),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
 
-        Text(
-            text = contact.lastContactTimeStamp.toString(),
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(8.dp),
-            style = TextStyle(
-                fontSize = 15.sp,
-                fontWeight = Bold
-            ),
-            color = Color.Gray
-        )
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Column() {
+                    Text(
+                        text = "Name 1", style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row() {
+                        Text(text = "You: Last Message 1")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(text = "Time 1")
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(15.dp))
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Color.Gray)
+        }
+
     }
 }
 
+@Preview(showSystemUi = true)
 @Composable
-fun SignUpText( onSignUpClick: () -> Unit){
+fun PreviewContactBox() {
+    ContactBox(contact = Contact("1", 1), onClick = {})
+
+}
+
+
+@Composable
+fun SignUpText(onSignUpClick: () -> Unit) {
     val annotationString = buildAnnotatedString {
         append("Don't have an account? ")
         pushStyle(
